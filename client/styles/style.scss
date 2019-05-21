@@ -1,0 +1,40 @@
+@import "_global_variables.scss";
+
+@import "mixins/_fonts.scss";
+
+@import "utilities/_flex.scss";
+@import "utilities/_spacing.scss";
+@import "utilities/_sizing.scss";
+@import "utilities/_colors.scss";
+@import "utilities/_fonts.scss";
+@import "utilities/_borders.scss";
+@import "utilities/_text.scss";
+
+@import "blocks/container/_container.scss";
+@import "blocks/container/header/_header.scss";
+@import "blocks/container/main/_body.scss";
+
+
+@import "blocks/container/main/_login-page";
+
+
+* {
+    font-family: $font-family;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    overflow-y: scroll;
+    margin: 0;
+    background-color: $main-second-background-color;
+}
+
+html {
+    min-height: 100%;
+    font-family: 'Segoe UI';
+    font-size: 14px;
+}

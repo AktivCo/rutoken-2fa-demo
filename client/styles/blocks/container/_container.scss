@@ -1,0 +1,14 @@
+.container {
+    width: 70%;    
+    border-left: $border;
+    border-right: $border;
+    background-color: $main-first-background-color;
+    min-height: 100vh;
+}
+
+
+@media all and (max-width: 1210px){
+    .container {
+        width: 100%;
+    }
+}

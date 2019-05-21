@@ -1,0 +1,59 @@
+header {
+    background-image: $background-image-line;
+    background-repeat: repeat-x;
+    background-size: 100% 35%;
+    height: 90px;
+    flex-grow: 0;
+
+    .header__img {
+        padding-left: 2rem;
+
+        .img__logo {
+            background: $logo-image no-repeat center center;
+            width: 11rem;
+            height: 4rem;
+            position: absolute;
+        }
+    }
+    
+    .header__menu {
+        padding-right: 2rem;
+        color: $gray-light;
+        font-size: $font-size--smallest;
+        text-transform: uppercase;
+        letter-spacing: 0.2px;
+
+        @include font-bold();
+
+        ul {
+            list-style-type: none;
+            font-size: 0;
+            height: 32px;
+
+            li {
+                font-size: 12px;
+                color: $key-container-dark;
+
+                a {
+                    display: inline-block;
+                    padding-top: 0.5rem;
+                    padding-bottom: 0.6rem;
+                    padding-left: 1rem;
+                    padding-right: 1rem;
+                    color: $gray-light;
+                    text-decoration: none;
+                    
+                    &:active {
+                        color: $key-container-dark;
+                    }
+                }
+
+                a.selected {
+                    color: $key-container-dark;
+                    border-bottom: 2px solid $key-container-dark;
+                    text-decoration: none;
+                }               
+            }
+        }        
+    }
+}        

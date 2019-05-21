@@ -1,0 +1,11 @@
+@mixin font-normal(){
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+}
+
+@mixin font-bold(){
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+}
