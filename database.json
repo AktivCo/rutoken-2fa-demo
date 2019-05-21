@@ -1,0 +1,4 @@
+{
+    "connectionString": "postgresql://me:password@localhost:5432",
+    "connectionStringWithDBName": "postgresql://me:password@localhost:5432/db"
+}
