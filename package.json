@@ -7,11 +7,12 @@
         "build:client": "webpack --watch --config webpack.config.client.babel.js",
         "build:server": "webpack --watch --config webpack.config.server.babel.js",
         "build:client:prod": "webpack --mode production --config webpack.config.client.babel.js",
-        "build:server:prod": "webpack --config webpack.config.server.babel.js",
+        "build:server:prod": "webpack --config webpack.config.server.babel.js --env.USE_HTTPS=false",
+        "build:server:https": "webpack --config webpack.config.server.babel.js --env.USE_HTTPS",
         "drop:db": "db-migrate db:drop db -e connectionString",
         "create:db": "db-migrate db:create db -e connectionString",
         "migrate:db": "db-migrate up -e connectionStringWithDBName",
-        "start": "node dist/app.bundle.js"
+        "start": "USE_HTTPS=1 node dist/app.bundle.js"
     },
     "repository": {
         "type": "git"

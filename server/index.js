@@ -3,7 +3,9 @@ import Express from 'express';
 import BodyParser from 'body-parser';
 import Cors from 'cors';
 import CookieParser from 'cookie-parser';
-
+import https from 'https';
+import fs from 'fs';
+import path from 'path';
 import jwt from 'jsonwebtoken';
 
 import crypto from 'crypto';
@@ -12,7 +14,7 @@ import hotp from 'otplib/hotp';
 
 import { withUser, withTwoFactor, checkToken } from './middleware';
 
-import { APP_ID, NODE_PATH, JWT_SECRET } from './environment';
+import { APP_ID, NODE_PATH, JWT_SECRET, USE_HTTPS } from './environment';
 
 import users from './users';
 
@@ -159,7 +161,7 @@ app.post('/register/otp', checkToken, withUser, (request, response, next) => {
 app.post('/login/otp', checkToken, withUser, (request, response, next) => {
     const { user } = request;
     let currentCounter = user.otpCounter;
-    console.log(user.otpAttempt);
+
     while (currentCounter <= user.otpCounter + HOTPcounterLimit) {
         const hotpCheck = HOTP.check(request.body.password, user.otpSecret, currentCounter);
         if (hotpCheck) {
@@ -187,4 +189,12 @@ app.post('/logout', (request, response) => {
     response.send();
 });
 
-app.listen(3000);
+if (USE_HTTPS) {
+    const httpsOptions = {
+        key: fs.readFileSync(path.join(NODE_PATH, 'key.pem')),
+        cert: fs.readFileSync(path.join(NODE_PATH, 'cert.pem')),
+    };
+    https.createServer(httpsOptions, app).listen(443);
+} else {
+    app.listen(3000);
+}
