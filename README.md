@@ -10,11 +10,11 @@
 
 ## Системные требования
 
-Node js (версия v11.5.0 или новее)
-Nginx (конфиг реверс прокси на localhost: 3000 с доступом по https)
-Https сертификат (Валидный сертификат Let's encrypt);
-Reverse proxy
-PostgreSQL (на сервере нужна PostgreSQL версии не ниже 11, учетная запись должна быть наделена правами создания БД. Пример connectionString: postgresql://user:user@test.auth.ru:54321. Доступ к сервису PostgreSQL осуществляться по паролю, поэтому в файле /var/lib/postgresql/data/pg_hba.conf должен быть установлен метод аутентификации md5)
+- Node js (версия v11.5.0 или новее)
+- Nginx (конфиг реверс прокси на localhost: 3000 с доступом по https)
+- Https сертификат (Валидный сертификат Let's encrypt);
+- Reverse proxy
+- PostgreSQL (на сервере нужна PostgreSQL версии не ниже 11, учетная запись должна быть наделена правами создания БД. Пример connectionString: - postgresql://user:user@test.auth.ru:54321. Доступ к сервису PostgreSQL осуществляться по паролю, поэтому в файле /var/lib/postgresql/data/pg_hba.conf -должен быть установлен метод аутентификации md5)
 
 ## Настройка БД
 
