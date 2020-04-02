@@ -32,6 +32,11 @@ const Auth = ({ twoFactorType }) =>
 const mapState = (store) =>
     ({ twoFactorType: store.get('twoFactor') });
 
+
+AuthRenderer.propTypes = { twoFactorType: PropTypes.string };
+AuthRenderer.defaultProps = { twoFactorType: null };
+
+
 Auth.propTypes = { twoFactorType: PropTypes.string };
 Auth.defaultProps = { twoFactorType: null };
 

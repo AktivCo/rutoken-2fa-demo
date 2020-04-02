@@ -105,7 +105,7 @@ class U2FCommon extends React.Component {
                                                         className="styled"
                                                         target="__blank"
                                                     >
-                                                    Включено обнаружение Рутокен U2F в Linux
+                                                        Включено обнаружение Рутокен U2F в Linux
                                                     </a>
                                                 </li>
                                                 <li className="mt-1">

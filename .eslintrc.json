@@ -43,7 +43,7 @@
         "object-shorthand": ["warn"],
         "consistent-return": ["warn"],
         "react/no-multi-comp": [
-            true,
+            1,
             {
                 "ignoreStateless": true
             }
