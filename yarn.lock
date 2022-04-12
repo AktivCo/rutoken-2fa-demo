@@ -7613,10 +7613,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-u2f-api@^1.0.10:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/u2f-api/-/u2f-api-1.1.1.tgz#594f600ff7bb49e8bb03e9f533e1f7bfc95f2e0f"
-  integrity sha512-tbmMBmg9eaFv+cdcBwja/hbpdXwcvBV0YSQh674nmP3HI0hNWcNAp9LRJ0jl9HGWLF7gF/3UKHzIxlXCW8j7kw==
+u2f-api@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/u2f-api/-/u2f-api-1.2.1.tgz#9aa599eaa0c4e6c89683204a0530c28924c3a7b5"
+  integrity sha512-4kfxen+mVxYkdJWHIS7c4HxsqNUs6fkrxlMLi7uQTVVYMVfTh73PhYoAmp1B0PRGELGDiKmXlssgqxcPvtpfSg==
 
 u2f@^0.1.3:
   version "0.1.3"

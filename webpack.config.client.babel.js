@@ -24,7 +24,10 @@ export default {
                                     targets: {
                                         "ie": "11",
                                         'firefox': '60',
-                                        'chrome': '49'
+                                        'chrome': '49',
+                                        'safari': '13',
+                                        'edge': '79',
+                                        'opera': '42',
                                     }
                                 }
                             ]
