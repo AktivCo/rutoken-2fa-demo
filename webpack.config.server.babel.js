@@ -26,11 +26,13 @@ export default (env) => {
             extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
         },
         plugins: [
-            new webpack.IgnorePlugin(/^pg-native$/),
-            env.USE_HTTPS && new CopyPlugin([
-                { from: 'ssl/key.pem' },
-                { from: 'ssl/cert.pem' },
-            ])
+            new webpack.IgnorePlugin({ resourceRegExp: /^pg-native$/ }),
+            env.USE_HTTPS && new CopyPlugin({
+                patterns:[
+                    { from: 'ssl/key.pem' },
+                    { from: 'ssl/cert.pem' },
+                ]
+            })
         ],
         target: 'node',
         devtool: false,
