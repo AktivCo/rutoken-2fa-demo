@@ -14,7 +14,7 @@ export default {
             {
                 test: /\.(js|jsx)$/,
                 loader: 'babel-loader',
-                query: {
+                options: {
                     presets:
                         [
                             '@babel/preset-react',
