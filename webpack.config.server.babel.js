@@ -18,7 +18,7 @@ export default (env) => {
                     exclude: [
                         path.resolve(__dirname, 'node_modules/')
                     ],
-                    loader: "eslint-loader"
+                    // loader: "eslint-loader"
                 },
             ],
         },
@@ -27,12 +27,6 @@ export default (env) => {
         },
         plugins: [
             new webpack.IgnorePlugin({ resourceRegExp: /^pg-native$/ }),
-            env.USE_HTTPS && new CopyPlugin({
-                patterns:[
-                    { from: 'ssl/key.pem' },
-                    { from: 'ssl/cert.pem' },
-                ]
-            })
         ],
         target: 'node',
         devtool: false,

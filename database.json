@@ -1,4 +1,4 @@
 {
-    "connectionString": "postgresql://me:password@localhost:5432",
-    "connectionStringWithDBName": "postgresql://me:password@localhost:5432/db"
+    "connectionString": "postgresql://postgres:3344@localhost:5432",
+    "connectionStringWithDBName": "postgresql://postgres:postgres@localhost:5432/database"
 }

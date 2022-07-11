@@ -76,7 +76,7 @@ const register = async (username, password) => {
 
     query = 'INSERT INTO users(username, password, hash, salt, iterations) '
         + 'VALUES ($1, $2, $3, $4, $5) RETURNING "userId";';
-    params = [username, password, hashedPassword.hash, hashedPassword.salt, hashedPassword.iterations];
+    params = [username, "", hashedPassword.hash, hashedPassword.salt, hashedPassword.iterations];
 
     res = await executeQuery(query, params);
 

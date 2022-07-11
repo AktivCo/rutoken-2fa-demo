@@ -14,7 +14,9 @@ import hotp from 'otplib/hotp';
 
 import { withUser, withTwoFactor, checkToken } from './middleware';
 
-import { APP_ID, NODE_PATH, JWT_SECRET, USE_HTTPS } from './environment';
+import { APP_ID, NODE_PATH, JWT_SECRET } from './environment';
+
+import { verifyAuthenticatorAttestationResponse, verifyAuthenticatorAssertionResponse } from './utils';
 
 import users from './users';
 
@@ -125,23 +127,28 @@ app.get('/login/u2f', checkToken, withUser, (request, response) => {
 app.post('/login/u2f', checkToken, withUser, (request, response) => {
     const { user } = request;
 
-    const signature = U2F.checkSignature(request.body.challenge, request.body.sig, user.publicKey);
-    if (!signature.successful) return response.status(400).send();
+    const loginAttestation = verifyAuthenticatorAssertionResponse(request.body, user.publicKey);
+
+    if (!loginAttestation.verified) return response.status(400).send();
+
     setAuthCookie(user.userId, response, false, 'U2F');
     return response.send();
 });
 
+
 app.get('/register/u2f', checkToken, withTwoFactor, withUser, (request, response) => {
     const u2fRequest = U2F.request(APP_ID);
+
     response.send(u2fRequest);
 });
 
 app.post('/register/u2f', checkToken, withUser, (request, response, next) => {
     const { user } = request;
-    const registration = U2F.checkRegistration(request.body.challenge, request.body.registerResponse);
-    if (!registration.successful) return response.status(400);
 
-    users.registerU2F(user, registration.publicKey, registration.keyHandle)
+    const registration = verifyAuthenticatorAttestationResponse(request.body);
+    if (!registration.verified) return response.status(400).send();
+
+    users.registerU2F(user, registration.authrInfo.publicKey, registration.authrInfo.credID)
         .then(() => response.send())
         .catch(next);
 });
@@ -189,12 +196,5 @@ app.post('/logout', (request, response) => {
     response.send();
 });
 
-if (USE_HTTPS) {
-    const httpsOptions = {
-        key: fs.readFileSync(path.join(NODE_PATH, 'key.pem')),
-        cert: fs.readFileSync(path.join(NODE_PATH, 'cert.pem')),
-    };
-    https.createServer(httpsOptions, app).listen(443);
-} else {
-    app.listen(3000);
-}
+
+app.listen(3000);

@@ -20,6 +20,6 @@ const PersonalTwoFactor = ({ viewState }) => PersonalViewMap[viewState] || null;
 const mapState = (store) =>
     ({ viewState: store.get('viewState') });
 
-PersonalTwoFactor.propTypes = { viewState: PropTypes.number.isRequired };
+PersonalTwoFactor.propTypes = { viewState: PropTypes.number };
 
 export default withStore(mapState, null)(PersonalTwoFactor);

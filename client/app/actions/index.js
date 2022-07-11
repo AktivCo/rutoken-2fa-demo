@@ -1,9 +1,38 @@
 
 import axios from 'axios';
-import u2fApi from 'u2f-api';
 import viewStates from '../PersonalViewStates';
+import base64url from '../base64url-front';
 
 const u2fTimeout = 60;
+
+const publicKeyCredentialToJSON = (pubKeyCred) => {
+    /* eslint-disable */
+
+    if (pubKeyCred instanceof Array) {
+        let arr = [];
+        for (let i of pubKeyCred) {
+            arr.push(publicKeyCredentialToJSON(i));
+        }
+        return arr;
+    }
+
+    if (pubKeyCred instanceof ArrayBuffer) {
+        return base64url.encode(pubKeyCred);
+    }
+
+    if (pubKeyCred instanceof Object) {
+        let obj = {};
+
+        for (const key in pubKeyCred) {
+            obj[key] = publicKeyCredentialToJSON(pubKeyCred[key]);
+        }
+
+        return obj;
+    }
+    /* eslint-enable */
+    return pubKeyCred;
+};
+
 
 const login = (userName, password, register) =>
     (store) => {
@@ -39,17 +68,27 @@ const loginU2F = () =>
     (store) => {
         let sequense = axios.get('/login/u2f');
 
-        const response = { challenge: null, sig: null };
+        if (store.get('isU2FSupported')) {
+            sequense = sequense.then(({ data: signRequest }) => {
+                const publicKey = {
+                    challenge: Uint8Array.from(
+                        signRequest.challenge, (c) => c.charCodeAt(0),
+                    ),
+                    allowCredentials: [{
+                        id: base64url.decode(signRequest.keyHandle),
+                        type: 'public-key',
+                    }],
+                    timeout: u2fTimeout * 1000,
+                };
 
-        sequense = sequense.then(({ data: signRequest }) => {
-            response.challenge = signRequest;
-            return u2fApi.sign(signRequest, u2fTimeout);
-        });
+                return navigator.credentials.get({ publicKey });
+            });
 
-        sequense = sequense.then((loginResponse) => {
-            response.sig = loginResponse;
-            return axios.post('/login/u2f', response);
-        });
+            sequense = sequense.then((result) => {
+                const credentials = publicKeyCredentialToJSON(result);
+                return axios.post('/login/u2f', credentials);
+            });
+        }
 
         sequense = sequense
             .then(() =>
@@ -88,10 +127,11 @@ const logout = () =>
 
 const checkLoginState = () =>
     (store) => {
-        let sequense = u2fApi.isSupported();
+        let sequense = Promise.resolve();
 
-        sequense = sequense.then((result) => {
-            store.set('isU2FSupported', result);
+        sequense = sequense.then(() => {
+            store.set('isU2FSupported', !!window.PublicKeyCredential);
+
             return axios.get('/loginstate', {});
         });
 
@@ -136,18 +176,37 @@ const startRegisterU2F = () =>
 
 const registerU2F = () =>
     (store) => {
+        const user = store.get('userinfo');
+
         let sequense = axios.get('/register/u2f');
 
-        const response = { challenge: null, registerResponse: null };
-        sequense = sequense.then(({ data: challenge }) => {
-            response.challenge = challenge;
-            return u2fApi.register(challenge, u2fTimeout);
+        sequense = sequense.then(({ data }) => {
+            const { challenge, appId } = data;
+
+            const publicKeyCredentialCreationOptions = {
+                challenge: Uint8Array.from(challenge, (c) => c.charCodeAt(0)),
+                rp: {
+                    name: 'Rutoken',
+                    id: appId,
+                },
+                user: {
+                    id: Uint8Array.from(user.username, (c) => c.charCodeAt(0)),
+                    name: user.username,
+                    displayName: user.username,
+                },
+                pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
+                authenticatorSelection: { authenticatorAttachment: 'cross-platform' },
+                timeout: 60000,
+                attestation: 'direct',
+            };
+
+            const opts = { publicKey: publicKeyCredentialCreationOptions };
+            return navigator.credentials.create(opts);
         });
 
-
         sequense = sequense.then((result) => {
-            response.registerResponse = result;
-            return axios.post('/register/u2f', response);
+            const credential = publicKeyCredentialToJSON(result);
+            return axios.post('/register/u2f', credential);
         });
 
 
@@ -155,7 +214,7 @@ const registerU2F = () =>
             .then(() =>
                 getUserInfo()(store))
             .catch((err) => {
-                window.console.warn(err);
+                window.console.log(err);
                 store.set('u2fError', true);
             });
 
